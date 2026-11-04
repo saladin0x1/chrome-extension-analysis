@@ -1,0 +1,10 @@
+# Vendor artifacts (download with tools/download_crx.py — do not commit)
+*.crx
+*.zip
+crx/
+ext/
+
+# macOS
+.DS_Store
+__pycache__/
+*.pyc
