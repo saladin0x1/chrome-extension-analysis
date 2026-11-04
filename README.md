@@ -16,6 +16,12 @@ Case-by-case static reverse engineering and threat-intelligence assessments of b
 
 *(new cases appended as `cases/NNN-slug/`)*
 
+### Case 001 — the crowd-leech loop, in one snippet
+
+[![Case 001 verdict: distributed scraping node](cases/001-contactout-email-finder/evidence/snippets/00-verdict-crowd-leech.png)](cases/001-contactout-email-finder/evidence/snippets/00-verdict-crowd-leech.js)
+
+*Verbatim chain from the shipped bundle: every installed browser harvests pages it views (whole DOM + unvisited bystanders), the server approves each URL per-upload (`1/0`), phones come out of seat-entitled API responses, and the aggregated DB is sold back via metered credits. Source: [`00-verdict-crowd-leech.js`](cases/001-contactout-email-finder/evidence/snippets/00-verdict-crowd-leech.js).*
+
 ## Case anatomy
 
 ```
