@@ -3,11 +3,11 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //
 // CLASSIFICATION : Grayware / surveillance-adjacent — DISTRIBUTED SCRAPING NODE
-// NOT            : Classic credential-stealing malware (session cookie `li_at` is
-//                  read locally, hashed, and never exfiltrated — see snippet 03)
-// NET EFFECT     : Every installed browser harvests data it is entitled to see,
-//                  uploads it to a central DB on the server's say-so, and that DB
-//                  is sold back per-reveal. The user IS the scraper.
+// NOT            : Credential-stealing malware (session cookie `li_at` is read
+//                  locally, hashed, and never exfiltrated — see snippet 03)
+// NET EFFECT     : Every installed browser harvests data visible to it, uploads
+//                  it to a central DB on the server's instruction, and that DB
+//                  is sold back per-reveal via metered credits.
 //
 // The entire business loop, verbatim identifiers, one chain:
 // ───────────────────────────────────────────────────────────────────────────────
@@ -18,11 +18,11 @@ cachePageHtml = () =>
                cleanDomAndZip(document.querySelector("html")),   // ← the entire page
                "pv_rc");
 
-// 2. HARVEST — people you never clicked also ship
+// 2. HARVEST — profiles the user never visited also ship
 uploadProfiles = async (doc) => {
   const minis = [ ...alsoViewedProfiles(doc),
                   ...peopleYouMayKnowProfiles(doc),
-                  ...recommendationsProfiles(doc) ];             // ← bystanders
+                  ...recommendationsProfiles(doc) ];             // ← unvisited profiles
   cacheProfiles(getPageUrl(doc.location), JSON.stringify([
     { data: fullProfile(doc), type: "json_reg_pro_full" },
     { data: minis,            type: "json_reg_pro_mini" } ]));
@@ -35,7 +35,7 @@ if (n) for (const p of n.phoneNumbers) p.number && e.phones.push(p.number);
 // 4. GATE — the SERVER decides, per URL, whether it wants this page's data
 cacheProfiles = async (url, profiles) => {
   if (1 === (await runtime.sendMessage(
-      { command: PROFILE_UPLOAD_CHECK, url })).data)            // ← server: "yes, feed me"
+      { command: PROFILE_UPLOAD_CHECK, url })).data)            // ← server approves per-URL
     runtime.sendMessage({ command: UPLOAD_PROFILES, url, profiles });
 };
 // background.js: webRequest("linkedin/profile/secr", { t: "pc", p: url }) → 1/0
@@ -49,9 +49,9 @@ setCredits = async (t) => {
 };
 //
 // ───────────────────────────────────────────────────────────────────────────────
-// VERDICT: A phone number in this product's database is a phone number that was
-// visible to exactly ONE entitled user, exactly ONCE. The extension converts its
-// user base into an unattributable harvesting fleet; ToS/ban risk falls on the
-// user, privacy harm falls on profile subjects, and ContactOut holds the asset.
-// Malicious in effect — leech, not leet.
+// VERDICT: Every phone number in this database was visible to exactly one
+// entitled user, exactly once. The extension converts its user base into a
+// distributed harvesting fleet: ToS/ban risk falls on the user, privacy harm
+// falls on profile subjects, and the aggregated asset is held server-side.
+// Classification: grayware — data-harvesting by design, not credential theft.
 // ═══════════════════════════════════════════════════════════════════════════════
